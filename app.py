@@ -4,19 +4,10 @@ from langchain_core.tools import tool
 from langchain.agents import tool as agent_tool, initialize_agent, AgentType
 from langchain_google_genai import ChatGoogleGenerativeAI
 
-# ========================
-# 🔐 Set your Gemini API Key
-# ========================
 os.environ["GOOGLE_API_KEY"] = "AIzaSyABUqgYzp7ekmlyKErgG5hu_-H0JIAPB1A"  # Replace this with your Gemini API key
 
-# ========================
-# 🤖 Initialize LLM (Gemini 2.5 Flash)
-# ========================
 llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash")
 
-# ========================
-# 🧠 Define Tools
-# ========================
 @tool
 def refine_idea(input: str) -> str:
     """Refines a vague startup idea into a clear problem-solution statement."""
@@ -47,23 +38,18 @@ def elevator_pitch(input: str) -> str:
     prompt = f"Write a 30-second elevator pitch for this startup:\n\n{input}"
     return llm.invoke(prompt)
 
-# ========================
-# 🤖 LangChain Agent with Tools
-# ========================
+
 tools = [refine_idea, market_research, business_model, pitch_deck, elevator_pitch]
 agent = initialize_agent(tools, llm, agent=AgentType.OPENAI_FUNCTIONS, verbose=False)
 
-# ========================
-# 🌐 Streamlit UI
-# ========================
+
 st.set_page_config(page_title="Startup Assistant", page_icon="🚀")
-st.title("🚀 AI-Powered Startup Assistant")
+st.title(" AI-Powered Startup Assistant")
 st.write("Built with LangChain + Gemini 2.5 Flash")
 
-# User Input
 user_input = st.text_area("💡 Describe your startup idea", height=150, placeholder="e.g. An AI tool that helps students learn based on their emotions...")
 
-# Tool selection
+
 selected_tool = st.selectbox(
     "🛠 What would you like help with?",
     (
@@ -75,7 +61,7 @@ selected_tool = st.selectbox(
     )
 )
 
-# Action Button
+
 if st.button("Generate"):
     if user_input.strip() == "":
         st.warning("Please enter a startup idea first.")
@@ -95,8 +81,8 @@ if st.button("Generate"):
             else:
                 result = agent.run(user_input)
 
-            st.success("✅ Output")
+            st.success(" Output")
             st.markdown(result)
 
         except Exception as e:
-            st.error(f"❌ An error occurred: {e}")
+            st.error(f" An error occurred: {e}")
